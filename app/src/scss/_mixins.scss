@@ -1,0 +1,29 @@
+@mixin btn($type) {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    font-size: 14px;
+    padding: 8px 30px;
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    @if $type == 'primary' {
+        background-color: $app-theme-color;
+        color: white;
+
+        &:hover {
+            background-color: #215aba;
+        }
+    } @else {
+        background-color: rgba(0,0,0,0.2);
+        color: black;
+
+        &:hover {
+            background-color: #A19F9D;
+        }
+    }
+}
