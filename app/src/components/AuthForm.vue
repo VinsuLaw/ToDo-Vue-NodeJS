@@ -36,6 +36,23 @@
           }}
         </small>
       </div>
+
+      <div class="warns" v-if="!isPassValid">
+        <small>Invalid password.</small>
+      </div>
+
+      <div class="warns" v-if="!isEmailValid">
+        <small>Such email does not exist.</small>
+      </div>
+
+      <div class="warns" v-if="!isEmailValid_reg">
+        <small>User with such e-mail is already registered.</small>
+      </div>
+
+      <div class="warns" v-if="undefinedError">
+        <small>An unknown error has occurred.</small>
+      </div>
+
     </form>
 </template>
 
@@ -43,6 +60,7 @@
 import { ref } from '@vue/reactivity'
 import { watch } from '@vue/runtime-core'
 import axios from 'axios'
+import {useStore} from 'vuex'
 
 export default {
   props: {
@@ -55,7 +73,15 @@ export default {
     const email = ref('')
     const password = ref('')
     const isValid = ref(true)
+    const isPassValid = ref(true)
+    const isEmailValid = ref(true)
+    const isEmailValid_reg = ref(true)
+    const undefinedError = ref(false)
     let unwatcher = null
+
+    const server_ip = process.env.VUE_APP_SERVERIP
+
+    const $store = useStore()
 
     const errors = {
       name: null,
@@ -74,6 +100,11 @@ export default {
       errors.name = null
       errors.email = null
       errors.password = null
+    }
+
+    function resetServerWarns() {
+      isPassValid.value = true
+      isEmailValid.value = true
     }
 
     function toggleAuth(type) {
@@ -121,18 +152,42 @@ export default {
       if (!isValid.value) {
         watching()
       } else {
-        console.log('payload');
         const payload = {
           name: name.value,
           email: email.value,
           password: password.value
         }
-        // headers: 'Access-Control, Allow-Origin',
-        const res = await fetch('http://localhost:3080/api/reg', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        })
+
+        if (props.type === 'signup') {
+          axios.post(`${server_ip}/api/auth/signup`, payload).then((response) => {
+            const status = response.data.status
+            if (status === 201) {
+              undefinedError.value = false
+              isEmailValid_reg.value = true
+              $store.commit('setToken', response.data.token)
+            } else if (status === 208) {
+              undefinedError.value = false
+              isEmailValid_reg.value = false
+            } else if (status === 408) {
+              undefinedError.value = true
+            }
+          })
+        } else {
+          payload.name = 'name'
+          axios.post(`${server_ip}/api/auth/login`, payload).then((response) => {
+            const status = response.data.status
+            if (status === 200) {
+              resetServerWarns()
+              $store.commit('setToken', response.data.token)
+            } else if (status === 406) {
+              resetServerWarns()
+              isPassValid.value = false
+            } else if (status === 404) {
+              resetServerWarns()
+              isEmailValid.value = false
+            }
+          })
+        }
       }
     }
 
@@ -143,7 +198,11 @@ export default {
       name,
       email,
       password,
-      errors
+      errors,
+      isPassValid,
+      isEmailValid,
+      isEmailValid_reg,
+      undefinedError,
     }
   }
 }
