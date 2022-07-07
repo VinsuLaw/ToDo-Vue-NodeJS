@@ -5,13 +5,16 @@
 </template>
 
 <script>
-import {ref, watch} from 'vue'
+import {ref} from 'vue'
 import AuthForm from '../components/AuthForm.vue'
+import {useRoute} from 'vue-router'
 
 export default {
   components: {AuthForm},
   setup() {
     const authType = ref('signup')
+    const $route = useRoute()
+    document.title = $route.meta.title
 
     function toggleAuth(type) {
       authType.value = type
@@ -24,4 +27,17 @@ export default {
   }
 }
 </script>
-  
+
+<style lang="scss" scoped>
+  @import "../scss/_variables.scss";
+
+  .container {
+    width: 100%;
+    height: 100vh;
+    background-color: $login-bg-color;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
