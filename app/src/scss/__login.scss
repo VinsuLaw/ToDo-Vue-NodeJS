@@ -1,14 +1,3 @@
-.container {
-    width: 100%;
-    height: 100vh;
-    background-color: $login-bg-color;
-    //filter: blur(0.1rem);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .form {
     width: 440px;
 
@@ -67,7 +56,7 @@
 .btn {
     margin-top: 30px;
 
-    @include btn('null');
+    @include btn('danger');
 
     margin-right: 5px;
 

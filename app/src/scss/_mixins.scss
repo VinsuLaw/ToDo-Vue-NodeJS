@@ -18,12 +18,63 @@
         &:hover {
             background-color: #215aba;
         }
-    } @else {
+    } @else if $type == 'danger' {
         background-color: rgba(0,0,0,0.2);
         color: black;
 
         &:hover {
             background-color: #A19F9D;
         }
+    } @else if $type == 'icon' {
+        padding: 0;
+        padding-left: 12px;
+        padding-right: 10px;
+    }
+}
+
+@mixin hint_content($type) {
+        position: absolute;
+        width: 60px;
+        background-color: white;
+        color: black;
+        font-size: 12px;
+        text-align: center;
+        padding-top: 9px;
+        padding-bottom: 7px;
+        border-radius: 3px;
+
+        box-shadow: 0px 0px 5px grey;
+
+        @if $type == 'search' {
+            left: -120px;
+        }
+
+        @if $type == 'danger' {
+            top: 25px;
+            right: -15px;
+        }
+}
+
+@mixin hint_triangle($type) {
+    position: absolute;
+    width: 0;
+    height: 0;
+
+    @if $type == 'search' {
+        border-style: solid;
+        border-color: transparent transparent transparent white;
+        left: 58px;
+        top: 5px;
+        border-width: 10px 0 10px 15px;
+    }
+
+    @if $type == 'danger' {
+        border-bottom: 15px solid white;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        bottom: 29px;
+        left: 20px;
+        -webkit-filter: drop-shadow(0px -2px 1px rgba(0,0,0,.2));
+        filter: drop-shadow(0px -2px 1px rgba(0,0,0,.2));
     }
 }
