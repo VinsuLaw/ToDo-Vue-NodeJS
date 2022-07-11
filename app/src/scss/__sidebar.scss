@@ -1,0 +1,70 @@
+.sidebar__container {
+    width: 300px;
+
+    background-color: $app-theme-card;
+    border-right: 1px solid #edebe9;
+}
+
+.sidebar__content {
+    margin-top: 70px;
+}
+
+.sidebar__list {
+    margin-top: 15px;
+}
+
+.sidebar_item {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    padding-top: 13px;
+    padding-bottom: 7px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    & .icon {
+        margin-right: 10px;
+
+        span {
+            color: $icons-color;
+            font-size: 18px;
+        }
+    }
+
+    & .title {
+        font-size: 14px;
+    }
+
+    & .default {
+        font-weight: 500;
+        color: $font-primary-color!important;
+    }
+
+    & .counter {
+        position: absolute;
+        right: 20px;
+        font-size: 14px;
+    }
+
+    & .default-counter {
+        color: $font-primary-color!important;
+    }
+
+    &:hover {
+        background-color: $hover-card;
+    }
+}
+
+.sidebar_item.active {
+    background-color: $border-card;
+    .title {
+        color: $app-theme-color;
+        font-weight: 500;
+    }
+
+    .counter {
+        color: $app-theme-color;
+        font-weight: 500;
+    }
+}

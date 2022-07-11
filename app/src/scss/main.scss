@@ -3,6 +3,8 @@
 @import "_mixins.scss";
 @import "__header.scss";
 @import "__loader.scss";
+@import "__sidebar.scss";
+@import "__list.scss";
 
 * {
     font-family: 'Roboto', sans-serif;
@@ -14,4 +16,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.vertical-center {
+    align-items: center;
 }
