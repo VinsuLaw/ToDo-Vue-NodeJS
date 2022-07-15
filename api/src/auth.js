@@ -35,6 +35,7 @@ router.post('/api/auth/signup', async (req, res, next) => {
 })
 
 router.post('/api/auth/login', async (req, res, next) => {
+    console.log('in auth')
     try {
         const {email, password} = req.body
         const candidate = await User.findOne({ email })
@@ -47,8 +48,8 @@ router.post('/api/auth/login', async (req, res, next) => {
                     jwtToken: accessToken, user: {email: candidate.email}
                 })
                 await session.save()
-
                 res.json({status: 200, message: 'Auth OK', token: accessToken})
+
             } else {
                 res.json({status: 406, message: 'Wrong password'})
             }
@@ -58,8 +59,6 @@ router.post('/api/auth/login', async (req, res, next) => {
     } catch (e) {
         res.json({status: 408, message: 'Undefined error'})
     }
-
-    next()
 })
 
 router.post('/api/logout', async (req, res, next) => {

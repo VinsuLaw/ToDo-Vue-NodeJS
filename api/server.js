@@ -8,6 +8,8 @@ const PORT = process.env.PORT || 3080
 const mongoose = require('mongoose')
 
 const auth = require('./src/auth.js')
+const crud = require('./src/crud.js')
+
 const authMiddleware = require('./src/middleware/auth-headers')
 const { MONGODB_URL } = require('./env.js')
 
@@ -23,6 +25,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(auth)
 app.use(authMiddleware)
+app.use(crud)
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../app/public/index.html'))

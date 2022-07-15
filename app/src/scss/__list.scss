@@ -4,6 +4,9 @@
     padding-top: 26px;
     padding-left: 50px;
     padding-right: 20px;
+    padding-bottom: 100px;
+
+    overflow-y: auto;
 }
 
 .list__header {
@@ -161,6 +164,7 @@
 }
 
 .tasks__listing-task {
+    position: relative;
     cursor: pointer;
     border-bottom: 1px solid $border-card;
 
@@ -209,7 +213,7 @@
 
     & .circle.done {
         .material-icons {
-            color: $app-theme-color;
+            color: $app-theme-color!important;
         }
     }
 
@@ -238,4 +242,23 @@
 
 .tasks__listing-task.active {
     background-color: $active-panel;
+}
+
+.no-tasks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    height: 400px;
+
+    h1 {
+        padding-bottom: 10px;
+    }
+}
+
+.searching_tasks {
+    font-weight: 500;
+    margin-bottom: 10px;
 }

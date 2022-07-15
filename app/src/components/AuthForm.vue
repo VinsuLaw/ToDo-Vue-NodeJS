@@ -187,6 +187,7 @@ export default {
           loading.value = true
           payload.name = 'name'
           axios.post(`${server_ip}/api/auth/login`, payload).then((response) => {
+            console.log(response.data);
             const status = response.data.status
             if (status === 200) {
               resetServerWarns()

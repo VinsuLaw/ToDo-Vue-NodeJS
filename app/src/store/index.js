@@ -6,7 +6,13 @@ const TOKEN_KEY = 'jwt-misakochka'
 
 export default createStore({
   state: {
-    token: localStorage.getItem(TOKEN_KEY)
+    token: localStorage.getItem(TOKEN_KEY),
+    countTasks: {
+      day: 0,
+      important: 0,
+      planned: 0,
+      tasks: 0
+    }
   },
   getters: {
     token(state) {
@@ -17,8 +23,8 @@ export default createStore({
       return !!state.token
     },
 
-    makeLogout(state) {
-      //
+    countTasks(state) {
+      return state.countTasks
     }
   },
   mutations: {
@@ -30,6 +36,10 @@ export default createStore({
     logout(state) {
       state.token = null
       localStorage.removeItem(TOKEN_KEY)
+    },
+
+    setCountTasks(state, payload) {
+      state.countTasks[payload.key] = payload.value
     }
   },
   actions: {
