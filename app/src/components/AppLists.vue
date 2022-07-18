@@ -2,6 +2,8 @@
     <div class="list__container">
         <div v-show="false">{{ myItem = item }}</div>
         <div v-show="false">{{ searchContent = search }}</div>
+        <div v-show="false">{{ infoAction = infoAct }}</div>
+        <div v-show="false">{{ needReload = reload }}</div>
 
         <h3 :class="['list__header']"
         v-if="searchContent">
@@ -66,9 +68,15 @@
             </div>
 
             <AppLoader v-if="loading"/>
-            <div :class="['tasks__listing-task', {active: false}]" v-for="(task, idx) in gettedTasks" :key="idx" v-else> 
+            <div :class="['tasks__listing-task']" 
+            v-for="(task, idx) in gettedTasks" 
+            :key="idx"
+            :data-id="idx"
+            @click="showInfo(task, idx)"
+            v-else
+            > 
                 <div class="row vertical-center">
-                    <div :class="['circle', {done: task.type === 'completed'}]" @click="modificate('complete', task.id)">
+                    <div :class="['circle', {done: task.type === 'completed'}]" @click.stop="modificate('complete', task.id)">
                         <span class="material-icons">
                             {{
                                 task.type === 'completed'
@@ -82,7 +90,7 @@
                         <span :class="['task-title', {done: task.type === 'completed'}]">{{ task.name }}</span>
                         <p class="task-type">{{toType(task.type)}}</p>
                     </div>
-                    <div :class="['star', {done: favoritesTasks[idx].favorite}]" @click="addFavorite(task.favorite, task.id, idx)">
+                    <div :class="['star', {done: favoritesTasks[idx].favorite}]" @click.stop="addFavorite(task.favorite, task.id, idx)">
                         <span class="material-icons">
                             {{
                                 favoritesTasks[idx].favorite
@@ -94,16 +102,17 @@
                 </div>
             </div>
 
-            <div class="no-tasks" v-if="totalTasks === 0">
-                <h1>(^_^)</h1>
-                <h3>You don't have any tasks yet.</h3> 
-            </div>
-
-            <div class="no-tasks" v-if="!isFound">
+            <div class="no-tasks" v-if="isFound === false">
                 <h1>(^_^)</h1>
                 <h3>The search for your query<br/>did not yield results.</h3>
             </div>
+
+            <div class="no-tasks" v-if="totalTasks === 0 && !search">
+                <h1>(^_^)</h1>
+                <h3>You don't have any tasks yet.</h3> 
+            </div>
         </div>
+        
     </div>
 </template>
 
@@ -119,13 +128,15 @@ import { useRouter } from 'vue-router'
 export default {
     components: {DatePickerVue, AppLoader},
 
-    props: ['item', 'search'],
+    props: ['item', 'search', 'infoAct', 'reload'],
 
-    emits: ['clear:input'],
+    emits: ['clear:input', 'infosidebar:show'],
     
     setup(props, {emit}) {
         let myItem = ref(props.item)
         let searchContent = ref(props.search)
+        let infoAction = ref(props.infoAct)
+        let needReload = ref(false)
 
         const server_ip = process.env.VUE_APP_SERVERIP
 
@@ -182,7 +193,6 @@ export default {
         }
 
         watch(myItem, (value) => {
-            console.log(value);
             clearForm()
             searchContent.value = ''
             emit('clear:input')
@@ -202,7 +212,6 @@ export default {
             if (value.length > 0) {
                 favoritesTasks.value = []
                 gettedTasks.value = []
-                console.log('> 0');
                 const response = await GET_TASKS(`${server_ip}/api/gettasks?type=all`, {format: value})
                 if (response.data.status === 401) {
                     $store.commit('logout')
@@ -273,13 +282,7 @@ export default {
             let picked = new Date(date).getTime()
             let isToday = new Date().toLocaleDateString() === new Date(date).toLocaleDateString()
         
-            if (isToday) {
-                pickedDateStr.value = 'Today'
-            } else if (today > picked) {
-                pickedDateStr.value = 'Expired'
-            } else {
-                pickedDateStr.value = new Date(date).toLocaleDateString()
-            }
+            pickedDateStr.value = new Date(date).toLocaleDateString()
             
             datePickerShow.value = false
         }
@@ -290,14 +293,7 @@ export default {
 
             let isToday = new Date().toLocaleDateString() === new Date(dateTime).toLocaleDateString()
 
-            if (isToday && picked > today) {
-                pickedDateTimeStr.value = 'Today'
-            } else if (today > picked) {
-                pickedDateTimeStr.value = 'Expired'
-            } else {
-                pickedDateTimeStr.value = new Date(dateTime).toLocaleString()
-            }
-
+            pickedDateTimeStr.value = new Date(dateTime).toLocaleString()
         }
 
         async function saveTask() {
@@ -310,12 +306,10 @@ export default {
                 favorite: map_taskTypes[props.item] === 'important' ? true : false
             }  
 
-            console.log(task);
-
-            const response = await POST(`${server_ip}/api/add`, task)
-            
-            clearForm()
+            await POST(`${server_ip}/api/add`, task)
             getTasks(map_taskTypes[myItem.value])
+
+            clearForm()
         }
 
         onUnmounted(() => {
@@ -351,6 +345,33 @@ export default {
             }
         }
 
+        function showInfo(task, id) {
+            $store.commit('setSelectedTask', task)
+            emit('infosidebar:show', task, id)
+            const $task = document.querySelector(`[data-id="${id}"]`)
+            const $tasks = document.querySelectorAll('[data-id]')
+           
+            $tasks.forEach(node => {
+                node.classList.remove('active')
+            })
+        
+            $task.classList.add('active')
+        }
+
+        watch(infoAction, value => {   
+            if (value === false) {
+                const $tasks = document.querySelectorAll('[data-id]')
+
+                $tasks.forEach(node => {
+                    node.classList.remove('active')
+                })
+            }
+        })
+
+        watch(needReload, (value) => {
+            getTasks(map_taskTypes[myItem.value])
+        })
+
         return {
             weekDay,
             day,
@@ -379,7 +400,11 @@ export default {
             addFavorite,
             favoritesTasks,
             totalTasks,
-            isFound
+            isFound,
+
+            infoAction,
+            showInfo,
+            needReload
         }
     }
 }

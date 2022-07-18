@@ -61,7 +61,7 @@
 
 <script>
 import { ref } from '@vue/reactivity'
-import { watch } from '@vue/runtime-core'
+import { onBeforeUnmount, onMounted, watch } from '@vue/runtime-core'
 import axios from 'axios'
 import {useStore} from 'vuex'
 import { useRouter } from 'vue-router'
@@ -205,6 +205,19 @@ export default {
         }
       }
     }
+
+    onMounted(() => {
+      document.onkeydown = function($event) {
+        if ($event.key === 'Enter') {
+          $event.preventDefault()
+          submitHandler()
+        }
+      }
+    })
+
+    onBeforeUnmount(() => {
+      document.onkeydown = null
+    })
 
     return {
       submitHandler,

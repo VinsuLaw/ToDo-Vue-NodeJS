@@ -19,3 +19,13 @@ export async function GET_TASKS(url, payload) {
         payload
     })
 }
+
+export async function PUT_TASK(url, payload) {
+    return await axios.put(url, {
+        headers: {
+            authorization: $store.getters.token,
+            skip: true
+        },
+        payload
+    })
+}

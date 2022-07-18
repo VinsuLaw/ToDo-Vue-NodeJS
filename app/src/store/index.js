@@ -12,6 +12,15 @@ export default createStore({
       important: 0,
       planned: 0,
       tasks: 0
+    },
+    selectedTask: {
+      name: null,
+      deadline: null,
+      alarm: null,
+      type: null,
+      favorite: null,
+      id: null,
+      description: null
     }
   },
   getters: {
@@ -25,6 +34,10 @@ export default createStore({
 
     countTasks(state) {
       return state.countTasks
+    },
+
+    getSelectedTask(state) {
+      return state.selectedTask
     }
   },
   mutations: {
@@ -40,6 +53,24 @@ export default createStore({
 
     setCountTasks(state, payload) {
       state.countTasks[payload.key] = payload.value
+    },
+
+    addCountTasks(state, payload) {
+      state.countTasks[payload.key] += payload.value
+    },
+
+    setSelectedTask(state, payload) {
+      state.selectedTask.name = payload.name
+      state.selectedTask.deadline = payload.deadline
+      state.selectedTask.alarm = payload.alarm
+      state.selectedTask.type = payload.type
+      state.selectedTask.favorite = payload.favorite
+      state.selectedTask.description = payload.description
+      state.selectedTask.id = payload.id
+    },
+
+    setPropertyTask(state, payload) {
+      state.selectedTask[payload.property] = payload.value
     }
   },
   actions: {

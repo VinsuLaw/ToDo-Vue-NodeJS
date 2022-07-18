@@ -19,7 +19,8 @@ router.post('/api/add', async (req, res, next) => {
                 deadline: req.body.payload.deadline,
                 alarm: req.body.payload.alarm,
                 type: req.body.payload.type,
-                favorite: req.body.payload.favorite
+                favorite: req.body.payload.favorite,
+                description: null
             }
         })
 
@@ -31,7 +32,8 @@ router.post('/api/add', async (req, res, next) => {
             deadline: req.body.payload.deadline,
             alarm: req.body.payload.alarm,
             type: req.body.payload.type,
-            favorite: req.body.payload.favorite
+            favorite: req.body.payload.favorite,
+            description: null
         }}}, {new: false}, (err, doc) => {
             if (err) throw err;
         })
@@ -106,6 +108,40 @@ router.post('/api/modify', async (req, res) => {
     } catch (err) {
         //
     }
+})
+
+router.put('/api/put', async (req, res) => {
+    Tasks.updateOne({'allTasks.id': req.body.payload.id}, {$set: {
+        'allTasks.$.name': req.body.payload.name,
+        'allTasks.$.deadline': req.body.payload.deadline,
+        'allTasks.$.alarm': req.body.payload.alarm,
+        'allTasks.$.type': req.body.payload.type,
+        'allTasks.$.favorite': req.body.payload.favorite,
+        'allTasks.$.description': req.body.payload.description
+    }}, function(err, object) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(object)
+        }
+    })
+
+    res.send('Updated!')
+})
+
+router.put('/api/delete', async (req, res) => {
+    const jwtToken = req.body.headers.authorization
+    const session = await Sessions.findOne({token: jwtToken})
+
+    await Tasks.findOneAndUpdate({
+        user: session.user.email
+    }, {
+        $pull: {
+            allTasks: {id: req.body.payload.id}
+        }
+    })
+
+    res.send('Deleted!')
 })
 
 module.exports = router
