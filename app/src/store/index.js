@@ -6,7 +6,22 @@ const TOKEN_KEY = 'jwt-misakochka'
 
 export default createStore({
   state: {
-    token: localStorage.getItem(TOKEN_KEY)
+    token: localStorage.getItem(TOKEN_KEY),
+    countTasks: {
+      day: 0,
+      important: 0,
+      planned: 0,
+      tasks: 0
+    },
+    selectedTask: {
+      name: null,
+      deadline: null,
+      alarm: null,
+      type: null,
+      favorite: null,
+      id: null,
+      description: null
+    }
   },
   getters: {
     token(state) {
@@ -17,8 +32,12 @@ export default createStore({
       return !!state.token
     },
 
-    makeLogout(state) {
-      //
+    countTasks(state) {
+      return state.countTasks
+    },
+
+    getSelectedTask(state) {
+      return state.selectedTask
     }
   },
   mutations: {
@@ -30,6 +49,28 @@ export default createStore({
     logout(state) {
       state.token = null
       localStorage.removeItem(TOKEN_KEY)
+    },
+
+    setCountTasks(state, payload) {
+      state.countTasks[payload.key] = payload.value
+    },
+
+    addCountTasks(state, payload) {
+      state.countTasks[payload.key] += payload.value
+    },
+
+    setSelectedTask(state, payload) {
+      state.selectedTask.name = payload.name
+      state.selectedTask.deadline = payload.deadline
+      state.selectedTask.alarm = payload.alarm
+      state.selectedTask.type = payload.type
+      state.selectedTask.favorite = payload.favorite
+      state.selectedTask.description = payload.description
+      state.selectedTask.id = payload.id
+    },
+
+    setPropertyTask(state, payload) {
+      state.selectedTask[payload.property] = payload.value
     }
   },
   actions: {

@@ -1,0 +1,322 @@
+.infoSidebar__container {
+    min-width: 350px;
+
+    background-color: $app-theme-card;
+    border-left: 1px solid #edebe9;
+}
+
+.infoSidebar__content {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.infoSidebar__main-info {
+    margin-bottom: 10px;
+    background-color: white;
+
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    display: flex;
+    flex-direction: row;
+
+    & .circle {
+        cursor: pointer;
+        margin-right: 5px;
+        padding-top: 5px;
+
+        span {
+            color: $icons-color;
+            font-size: 22px;
+        }
+
+        &:hover {
+            span {
+                color: $app-theme-color;
+            }
+        }
+    }
+
+    & input {
+        width: 240px;
+        height: 30px;
+        font-size: 14px;
+        margin-right: 10px;
+
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 5px;
+
+        outline: none;
+        border: none;
+        border-radius: 3px;
+        font-weight: 500;
+        color: $font-primary-color;
+
+        &:hover {
+            background-color: $border-card;
+        }
+
+        &:focus {
+            background-color: white;
+            border: 1px solid $icons-color;
+        }
+    }
+
+    & .star {
+        cursor: pointer;
+        padding-top: 5px;
+
+        span {
+            color: $icons-color;
+            font-size: 22px;
+        }
+
+        &:hover {
+            span {
+                color: orange;
+            }
+        }
+    }
+
+    & .star.favorite {
+        span {
+            color: orange;
+        }
+    }
+}
+
+.infoSidebar__alarms-info {
+    cursor: default;
+    background-color: white;
+
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    & .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .icon {
+            height: 20px;
+            margin-right: 15px;
+
+            span {
+                color: $icons-color;
+                font-size: 20px;
+            }
+        }
+
+        span {
+            color: $icons-color;
+            font-size: 15px;
+        }
+    }
+
+    &:hover {
+        background-color: $border-card;
+
+        span {
+            color: $font-primary-color;
+        }
+
+        .icon {
+            span {
+                color: $font-primary-color;
+            }
+        }
+    }
+}
+
+.infoSidebar__alarms-info.active {
+    background-color: $border-card;
+
+    span {
+        color: $font-primary-color;
+    }
+
+    .icon {
+        span {
+            color: $font-primary-color;
+        }
+    }
+}
+
+.border {
+    position: relative;
+
+    &::after {
+        content: "";
+        right: 0;
+        left: 50px;
+        bottom: 0;
+        height: 1px;
+        position: absolute;
+
+        background-color: $border-card;
+    }
+}
+
+.infoSidebar__btn {
+    margin-top: 10px;
+    cursor: default;
+    background-color: white;
+
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    & .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .icon {
+            height: 20px;
+            margin-right: 15px;
+
+            span {
+                color: $icons-color;
+                font-size: 20px;
+            }
+        }
+
+        span {
+            color: $icons-color;
+            font-size: 15px;
+        }
+    }
+
+    &:hover {
+        background-color: $border-card;
+
+        span {
+            color: $font-primary-color;
+        }
+
+        .icon {
+            span {
+                color: $font-primary-color;
+            }
+        }
+    }
+
+    & .red {
+        color: brown!important;
+    }
+}
+
+#infoSidebar__desc-info {
+    width: 100%;
+    margin-top: 10px;
+    height: 100px;
+
+    background-color: white;
+
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    outline: none;
+    border: none;
+    resize: none;
+
+    border: 1px solid white;
+
+    &:hover {
+        border: 1px solid $border-card;
+    }
+
+    &:focus {
+        border: 1px solid $app-theme-color;
+    }
+}
+
+.infoSidebar__footer {
+    width: 320px;
+    position: absolute;
+    bottom: 10px;
+
+    & .infoSidebar__foter-content {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        justify-content: space-between;
+    }
+
+    & .close {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        span {
+            color: $icons-color;
+        }
+
+        &:hover {
+            background-color: white;
+        }
+    }
+
+    & .created {
+        cursor: default;
+        height: 10px;
+        font-size: 12px;
+        color: $icons-color;
+    }
+
+    @include undoSelection();
+}
+
+.options__pickers {
+    position: absolute;
+    right: 50px;
+}
+
+.select-pos {
+    margin-top: 10px;
+}
+
+.categorie-select {
+    width: 250px;
+    position: absolute;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0px 0px 7px grey;
+
+    right: 50px;
+
+    .select__content {
+        display: flex;
+        flex-direction: column;
+
+        & .item {
+            cursor: pointer;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 15px;
+
+            font-size: 14px;
+            color: $font-primary-color;
+
+            &:hover {
+                background-color: $border-card;
+            }
+        }
+    }
+}

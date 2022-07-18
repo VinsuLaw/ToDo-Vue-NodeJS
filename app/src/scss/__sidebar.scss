@@ -1,8 +1,9 @@
 .sidebar__container {
-    width: 300px;
+    min-width: 250px;
 
     background-color: $app-theme-card;
     border-right: 1px solid #edebe9;
+    color: $font-primary-color;
 }
 
 .sidebar__content {
@@ -66,5 +67,9 @@
     .counter {
         color: $app-theme-color;
         font-weight: 500;
+    }
+
+    .material-icons {
+        color: $app-theme-color;
     }
 }

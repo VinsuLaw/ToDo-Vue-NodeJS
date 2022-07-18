@@ -35,7 +35,7 @@
                         v-if="searchData.length > 0"
                         @mouseover.stop="resetHovered = true"
                         @mouseleave="resetHovered = false"
-                        @click="searchData = ''; resetHovered = false"
+                        @click="searchData = ''; resetHovered = false; makeSearch()"
                         >
                         <div :class="['reset__content']" 
                             :style="resetHovered ? {backgroundColor: 'white'} : {backgroundColor: '#54a7e94d'}">
@@ -53,33 +53,46 @@
                 </div>
             </div>
         
-            <button class="exit" title="Logout" @click.prevent="exit">
+            <button class="exit" title="Logout" @click.prevent="isModalActive = true">
                 <span class="material-icons">logout</span>
             </button>
+
+            <div v-show="false">{{ clearInput = clearInp }}</div>
+        </div>
+        <div class="modal-container" v-if="isModalActive" @click="isModalActive = false">
+            <AppModal 
+                title="Do you really want to log out of your account?"
+                action="Log out"
+                @modal:close="isModalActive = false"
+                @modal:action="$emit('logout')"
+            />
         </div>
     </header>
 </template>
 
 <script>
 import { ref } from '@vue/reactivity'
-import { onBeforeUnmount, onMounted } from '@vue/runtime-core'
+import { onBeforeUnmount, onMounted, watch } from '@vue/runtime-core'
+import AppModal from './ui/AppModal.vue'
 
 export default {
+    components: {AppModal},
+
+    props: ['clearInp'],
     emits: ['logout', 'search:header'],
-    setup(_, {emit}) {
+
+    setup(props, {emit}) {
         const showHint = ref(false)
         const onFocus = ref(false)
         const searchData = ref('')
         const resetHovered = ref(false)
         const canShow = ref(false)
         const mainHover = ref(false)
+        const clearInput = ref(props.clearInp)
 
-        async function exit() {
-            const conf = confirm('Do you really want to log out?')
-            if (conf) {
-                emit('logout')
-            }
-        }
+        const isModalActive = ref(false)
+
+        
 
         onMounted(() => {
             document.onkeydown = function($event) {
@@ -93,10 +106,18 @@ export default {
             document.onkeydown = null
         })
 
-        function makeSearch() {
-            if (searchData.value.length > 0) {
-                emit('search:header', searchData.value)
+        watch(searchData, (value) => {
+            emit('search:header', value)
+        })
+
+        watch(clearInput, (condition) => {
+            if (condition) {
+                searchData.value = ''
             }
+        })
+
+        function makeSearch() {
+            emit('search:header', searchData.value)
         }
 
         return {
@@ -106,8 +127,10 @@ export default {
             resetHovered,
             canShow,
             mainHover,
-            exit,
-            makeSearch
+            makeSearch,
+            clearInput,
+
+            isModalActive
         }
     }
 }

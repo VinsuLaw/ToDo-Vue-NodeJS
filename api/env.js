@@ -1,4 +1,4 @@
 module.exports = {
-    MONGODB_URL: '',
-    ACCESS_TOKEN_SECRET: ''
+    MONGODB_URL: 'bd',
+    ACCESS_TOKEN_SECRET: 'pass'
 }
