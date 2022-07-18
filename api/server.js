@@ -14,7 +14,7 @@ const authMiddleware = require('./src/middleware/auth-headers')
 const { MONGODB_URL } = require('./env.js')
 
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, '../app/public')))
+app.use(express.static(path.join(__dirname, '../app/dist')))
 
 const corsOptions = {
     origin: '*',
@@ -28,7 +28,7 @@ app.use(authMiddleware)
 app.use(crud)
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../app/public/index.html'))
+    res.sendFile(path.join(__dirname, '../app/build/index.html'))
 })
 
 async function start() {
@@ -45,25 +45,3 @@ async function start() {
 }
 
 start()
-
-/*
-    function logout() {
-      console.log($store.getters.token);
-      axios.post(`${server_ip}/api/logout`, {token: $store.getters.token}).then(response => {
-        $store.commit('logout')
-      })  
-    }
-
-    function sendReq() {
-      axios.get(`${server_ip}/api/tasks`, {
-        headers: {
-          Authorization: $store.getters.token
-        }
-      }).then(response => {
-        console.log(response.data);
-        if (response.data.status === 401) {
-          $store.commit('logout')
-        }
-      })
-    }
-*/
